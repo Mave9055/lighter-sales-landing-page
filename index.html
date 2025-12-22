@@ -3,86 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1965 U.S. Army Aviation Presentation Lighter</title>
-    <meta name="description" content="1965 U.S. Army Aviation Presentation Lighter - WOC Arthur P. Lancy Jr., Fort Wolters. Vietnam War era artifact.">
+    <title>1965 Hughes TH-55A Presentation Lighter | Collector's Edition</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --gold: #d4af37;
             --dark-bg: #0a0a0a;
-            --card-bg: #161616;
-            --text: #e0e0e0;
+            --card-bg: #151515;
+            --text-gray: #b0b0b0;
+            --border: rgba(212, 175, 55, 0.3);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background-color: var(--dark-bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
             margin: 0;
-            line-height: 1.6;
+            line-height: 1.8;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 80px 20px;
         }
 
-        header, section {
-            margin-bottom: 60px;
+        /* --- HEADER SECTION --- */
+        header {
             text-align: center;
+            margin-bottom: 100px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--border);
         }
 
-        h1, h2 {
+        h1 {
+            font-family: 'EB Garamond', serif;
+            font-size: 3.5rem;
             color: var(--gold);
+            margin: 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
         }
 
-        /* Fixed Grid System */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+        .subtitle {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            color: var(--text-gray);
+            margin-top: 10px;
         }
 
-        .photo-card {
-            background: var(--card-bg);
-            border: 1px solid #333;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+        /* --- CHAPTER/SECTION STYLING --- */
+        section {
+            margin-bottom: 120px;
         }
 
-        .photo-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--gold);
+        .chapter-title {
+            font-family: 'EB Garamond', serif;
+            color: var(--gold);
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: capitalize;
         }
 
-        .photo-card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
+        .chapter-subtitle {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 50px;
             display: block;
         }
 
-        .photo-label {
-            padding: 15px;
-            color: var(--gold);
-            font-weight: bold;
-            font-size: 0.9rem;
-            border-top: 1px solid #333;
+        /* --- FLEX & GRID LAYOUTS --- */
+        .feature-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
         }
 
-        /* Lightbox Styles */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .img-wrap {
+            width: 100%;
+            height: 400px;
+            background: #111; /* Fixes White Box Issue */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+
+        .img-wrap:hover img {
+            opacity: 0.8;
+        }
+
+        .text-wrap {
+            padding: 30px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .text-wrap p {
+            margin: 0;
+            color: var(--gold);
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        /* --- LIGHTBOX MODAL --- */
         #lightbox {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 99999;
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -91,14 +148,14 @@
         #lightbox-img {
             max-width: 90%;
             max-height: 80vh;
-            border: 3px solid var(--gold);
-            border-radius: 4px;
+            border: 1px solid var(--gold);
         }
 
         #lightbox-caption {
-            color: white;
             margin-top: 20px;
-            font-size: 1.1rem;
+            color: var(--gold);
+            font-family: 'EB Garamond', serif;
+            font-size: 1.3rem;
             text-align: center;
             padding: 0 20px;
         }
@@ -106,104 +163,116 @@
         .close-btn {
             position: absolute;
             top: 20px; right: 30px;
-            color: white; font-size: 40px;
-            cursor: pointer;
+            color: white; font-size: 50px; cursor: pointer;
         }
 
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(212, 175, 55, 0.2);
-            color: white;
-            border: none;
-            padding: 20px;
-            cursor: pointer;
-            font-size: 2rem;
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .grid-layout { grid-template-columns: 1fr; }
+            .img-wrap { height: 280px; }
         }
-
-        .nav-btn:hover { background: var(--gold); color: black; }
-        #prev-btn { left: 10px; }
-        #next-btn { right: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>The Lancy Presentation Lighter</h1>
-        <p>A Tangible Piece of Aviation History | Fort Wolters, 1965</p>
+        <h1>Museum Grade Artifact</h1>
+        <div class="subtitle">The Arthur P. Lancy Jr. Collection</div>
+        <p style="margin-top: 20px; color: var(--text-gray);">Class 65-9WA • Fort Wolters • TH-55A Osage</p>
     </header>
 
     <section>
-        <h2>Documentation Gallery</h2>
-        <div class="photo-grid">
-            <div class="photo-card" onclick="openLightbox(0)">
-                <img src="pic_1.jpg" alt="Front Engraving">
-                <div class="photo-label">Front Engraving</div>
-            </div>
-            <div class="photo-card" onclick="openLightbox(1)">
-                <img src="pic_2.jpg" alt="Reverse Engraving">
-                <div class="photo-label">Reverse Engraving</div>
-            </div>
-            <div class="photo-card" onclick="openLightbox(2)">
-                <img src="pic_3.jpg" alt="Maker's Mark">
-                <div class="photo-label">Maker's Mark (PARK USA)</div>
-            </div>
-            <div class="photo-card" onclick="openLightbox(3)">
+        <h2 class="chapter-title">Chapter 2: Fort Wolters - Where Legends Were Forged</h2>
+        <span class="chapter-subtitle">The Primary Helicopter School of the U.S. Army</span>
+        
+        <div class="feature-box">
+            <div class="img-wrap" onclick="openLB('pic_7.jpg', 'Original Class Photo: Class 65-9WA at Fort Wolters')">
                 <img src="pic_7.jpg" alt="Class Photo">
-                <div class="photo-label">Fort Wolters Class Photo</div>
+            </div>
+            <div class="text-wrap">
+                <p>Class 65-9WA military aviation training class with handwritten identification key listing the names of soldiers. Representative of the era when thousands received primary training during the Vietnam War period.</p>
             </div>
         </div>
     </section>
+
+    <section>
+        <h2 class="chapter-title">Chapter 3: The Presentation Lighter</h2>
+        <span class="chapter-subtitle">A Tangible Piece of History, Preserved through Six Decades</span>
+        
+        <div class="grid-layout">
+            <div class="feature-box">
+                <div class="img-wrap" onclick="openLB('pic_1.jpg', 'Front View: Presentation Engraving')">
+                    <img src="pic_1.jpg" alt="Lighter Front">
+                </div>
+                <div class="text-wrap">
+                    <p>The front face displays "Class 65-9WA" and the Hughes "World Leader" insignia - symbols of cutting-edge aviation technology of 1965.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <div class="img-wrap" onclick="openLB('pic_2.jpg', 'Reverse View: Arthur P. Lancy Jr. Inscription')">
+                    <img src="pic_2.jpg" alt="Lighter Back">
+                </div>
+                <div class="text-wrap">
+                    <p>"Presented to WOC Arthur P. Lancy Jr., Member, First Graduating Class Using Hughes TH-55A Helicopter, Fort Wolters, Texas, 1965."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="chapter-title">Chapter 4: Craftsmanship & Authenticity</h2>
+        <span class="chapter-subtitle">Every Detail Tells the Story of Quality</span>
+        
+        <div class="grid-layout">
+            <div class="feature-box">
+                <div class="img-wrap" onclick="openLB('pic_3.jpg', 'Maker Mark: Park Lighter USA')">
+                    <img src="pic_3.jpg" alt="Branding">
+                </div>
+                <div class="text-wrap">
+                    <p>The PARK brand marking - "Made in U.S.A." - confirms this as an authentic American-made presentation piece from the mid-1960s.</p>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <div class="img-wrap" onclick="openLB('pic_1.jpg', 'Alternative View')">
+                    <img src="pic_1.jpg" alt="Side Profile">
+                </div>
+                <div class="text-wrap">
+                    <p>The side profile reveals exceptional preservation - original brushed metal finish intact and engravings sharp after nearly 60 years.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="text-align: center; border-top: 1px solid var(--border); padding-top: 40px; color: #555;">
+        <p>&copy; 2025 The Lancy Collection - Historical Documentation Only</p>
+    </footer>
 </div>
 
-<div id="lightbox">
-    <span class="close-btn" onclick="closeLightbox()">&times;</span>
-    <button id="prev-btn" class="nav-btn" onclick="changeImage(-1)">&#10094;</button>
-    <img id="lightbox-img" src="" alt="">
+<div id="lightbox" onclick="closeLB()">
+    <span class="close-btn">&times;</span>
+    <img id="lightbox-img" src="">
     <div id="lightbox-caption"></div>
-    <button id="next-btn" class="nav-btn" onclick="changeImage(1)">&#10095;</button>
 </div>
 
 <script>
-    const imageData = [
-        {src: 'pic_1.jpg', cap: 'Front Engraving: Full presentation text to WOC Arthur P. Lancy Jr.'},
-        {src: 'pic_2.jpg', cap: 'Reverse Engraving: Class 65-9WA with Hughes Aircraft logo.'},
-        {src: 'pic_3.jpg', cap: 'Makers Mark: Authentic PARK Lighter USA manufacturer stamp.'},
-        {src: 'pic_7.jpg', cap: 'Historical Context: Fort Wolters training class photo.'}
-    ];
-
-    let currentIndex = 0;
-
-    function openLightbox(index) {
-        currentIndex = index;
-        const lb = document.getElementById('lightbox');
-        lb.style.display = 'flex';
-        updateLightbox();
-        document.body.style.overflow = 'hidden'; // Stop scrolling
+    function openLB(src, cap) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox-caption').innerText = cap;
+        document.getElementById('lightbox').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     }
 
-    function closeLightbox() {
+    function closeLB() {
         document.getElementById('lightbox').style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 
-    function changeImage(dir) {
-        currentIndex += dir;
-        if (currentIndex >= imageData.length) currentIndex = 0;
-        if (currentIndex < 0) currentIndex = imageData.length - 1;
-        updateLightbox();
-    }
-
-    function updateLightbox() {
-        document.getElementById('lightbox-img').src = imageData[currentIndex].src;
-        document.getElementById('lightbox-caption').innerText = imageData[currentIndex].cap;
-    }
-
-    // Close on clicking background
-    document.getElementById('lightbox').addEventListener('click', function(e) {
-        if (e.target.id === 'lightbox') closeLightbox();
+    document.addEventListener('keydown', e => {
+        if(e.key === 'Escape') closeLB();
     });
 </script>
 
