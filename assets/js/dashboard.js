@@ -760,10 +760,26 @@ class CollectionDashboard {
 }
 
 // Initialize dashboard when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new CollectionDashboard());
-} else {
+const startDashboard = () => {
+    // Auth gate
+    if (typeof AuthManager !== 'undefined') {
+        if (!AuthManager.currentUser) {
+            AuthManager.redirectToLogin('Please log in to access the dashboard');
+            return;
+        }
+        if (!AuthManager.hasPermission('view:dashboard')) {
+            alert('You do not have permission to access the dashboard.');
+            window.location.href = 'index.html';
+            return;
+        }
+    }
     new CollectionDashboard();
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startDashboard);
+} else {
+    startDashboard();
 }
 
 // Add CSS animations for notifications

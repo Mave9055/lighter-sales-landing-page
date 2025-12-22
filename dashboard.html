@@ -83,6 +83,14 @@
                         <p class="institution-meta">Collection Management System</p>
                     </div>
                 </div>
+
+                <div class="user-info" aria-label="Authenticated user details">
+                    <div class="user-avatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name">Authenticating...</div>
+                        <div class="user-role">Loading user...</div>
+                    </div>
+                </div>
                 
                 <div class="collection-stats-compact">
                     <div class="stat-compact">
@@ -123,9 +131,15 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#reports" class="nav-section" data-section="reports">
+                        <a href="#reports" class="nav-section" data-section="reports" data-permission="view:reports">
                             <span class="nav-icon">📄</span>
                             <span class="nav-text">Institutional Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="audit.html" class="nav-section" data-permission="audit:full" data-action-description="view audit trail">
+                            <span class="nav-icon">🛡️</span>
+                            <span class="nav-text">Audit Trail</span>
                         </a>
                     </li>
                     <li class="nav-divider"></li>
@@ -139,6 +153,12 @@
                         <a href="verify.html" class="nav-section">
                             <span class="nav-icon">✅</span>
                             <span class="nav-text">Document Verification</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="login.html" class="nav-section">
+                            <span class="nav-icon">🔐</span>
+                            <span class="nav-text">Login</span>
                         </a>
                     </li>
                 </ul>
@@ -165,7 +185,7 @@
                             <span class="btn-icon">🔄</span>
                             Refresh Data
                         </button>
-                        <button class="btn btn-primary" data-action="export">
+                        <button class="btn btn-primary" data-action="export" data-permission="generate:reports" data-action-description="export dashboard report">
                             <span class="btn-icon">📤</span>
                             Export Report
                         </button>
@@ -453,6 +473,7 @@
     </div>
     
     <!-- Scripts -->
+    <script src="assets/js/auth.js" defer></script>
     <script src="assets/js/dashboard.js" defer></script>
     <script src="assets/js/identity.js" defer></script>
 </body>
