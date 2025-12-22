@@ -1,0 +1,315 @@
+/* ================================
+   BASE RESET & TYPOGRAPHY
+   ================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: "Georgia", "Times New Roman", serif;
+  line-height: 1.6;
+  background: #f4f1ec;
+  color: #111;
+  padding: 2rem;
+}
+
+/* Center document on screen */
+.document {
+  max-width: 900px;
+  margin: 0 auto 3rem auto;
+}
+
+/* ================================
+   SCREEN LAYOUT
+   ================================ */
+.site-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 2rem 2.5rem;
+  background: #171d16;
+  color: #f5f5f5;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.site-header h1 {
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #d4d4d4;
+}
+
+.meta-line {
+  font-size: 0.95rem;
+  color: #c0b68e;
+}
+
+/* Panels & page blocks */
+.content-panel,
+.certificate-panel {
+  background: #ffffff;
+  border: 1px solid #cfc7b4;
+  padding: 1.75rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.content-panel h2,
+.certificate-panel h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.content-panel p {
+  margin-bottom: 0.75rem;
+}
+
+/* Timeline items */
+.timeline-item {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid #888;
+}
+
+.timeline-item h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+
+/* Valor grid/cards */
+.valor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.valor-card {
+  background: #fdfbf7;
+  border: 1px solid #d6cbb4;
+  border-radius: 0.4rem;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.valor-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+/* Photo grid/cards */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.photo-card {
+  background: #fdfbf7;
+  border: 1px solid #d6cbb4;
+  border-radius: 0.4rem;
+  padding: 0.9rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.photo-card img {
+  width: 100%;
+  border-radius: 0.25rem;
+  border: 1px solid #ddd3bd;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.photo-card figcaption {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Certificate layout */
+.certificate-panel {
+  border-width: 2px;
+  border-color: #b99b4a;
+  background: #fbf7ee;
+}
+
+.certificate-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.certificate-header h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.certificate-subtitle {
+  font-size: 1.05rem;
+  color: #555;
+}
+
+.certificate-body {
+  margin-bottom: 1.5rem;
+}
+
+.certificate-row {
+  display: flex;
+  margin-bottom: 0.65rem;
+}
+
+.cert-label {
+  flex: 0 0 30%;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding-right: 0.75rem;
+}
+
+.cert-value {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+/* Signatures */
+.certificate-footer {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.signature-block {
+  flex: 1;
+  text-align: center;
+}
+
+.signature-line {
+  border-bottom: 1px solid #333;
+  height: 2.2rem;
+  margin-bottom: 0.35rem;
+}
+
+.signature-label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* Page-block utilities (for print) */
+.page-block {
+  margin-bottom: 2rem;
+}
+
+.no-break {
+  page-break-inside: avoid;
+}
+
+/* ================================
+   RESPONSIVE (SCREEN)
+   ================================ */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+
+  .content-panel,
+  .certificate-panel,
+  .site-header {
+    padding: 1.25rem 1.25rem;
+  }
+
+  .certificate-row {
+    flex-direction: column;
+  }
+
+  .cert-label {
+    margin-bottom: 0.25rem;
+  }
+
+  .certificate-footer {
+    flex-direction: column;
+  }
+}
+
+/* ================================
+   PRINT / PDF STYLES
+   ================================ */
+
+/* Target A4/Letter with safe margins */
+@page {
+  size: auto; /* Let printer choose (A4 or Letter) */
+  margin: 20mm;
+}
+
+/* General print reset */
+@media print {
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0;
+  }
+
+  body {
+    font-size: 11pt;
+  }
+
+  .document {
+    max-width: none;
+    margin: 0;
+  }
+
+  /* Remove shadows/borders that look noisy on paper */
+  .site-header,
+  .content-panel,
+  .certificate-panel {
+    box-shadow: none !important;
+  }
+
+  .site-header {
+    border-radius: 0;
+    border-width: 0 0 1px 0;
+  }
+
+  .content-panel,
+  .certificate-panel {
+    border-radius: 0;
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  .page-block {
+    page-break-inside: avoid;
+    margin-bottom: 16pt;
+  }
+
+  .no-break {
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: avoid;
+  }
+
+  /* Avoid awkward splits inside key elements */
+  .timeline-item,
+  .valor-card,
+  .photo-card,
+  .certificate-row,
+  .certificate-footer {
+    page-break-inside: avoid;
+  }
+
+  /* Optional: header/footer per page could be added using running elements
+     if using a print engine that supports them; keeping simple for browser print. */
+}

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Trail | Fort Wolters Archive</title>
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/watermark.css">
+    <style>
+        .audit-filters {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .audit-table-container {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .audit-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .audit-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background: var(--dashboard-bg);
+            border-bottom: 2px solid var(--border-light);
+            font-weight: 600;
+            color: var(--metric-primary);
+            position: sticky;
+            top: 0;
+        }
+
+        .audit-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: top;
+        }
+
+        .audit-table tr:hover {
+            background: var(--dashboard-bg);
+        }
+
+        .audit-event {
+            font-weight: 600;
+            color: var(--color-institutional-dark);
+        }
+
+        .audit-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-badge {
+            padding: 0.125rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .user-badge.curator { background: #dbeafe; color: #1e40af; }
+        .user-badge.board { background: #f0f9ff; color: #0c4a6e; }
+        .user-badge.auditor { background: #fef3c7; color: #92400e; }
+        .user-badge.admin { background: #f3e8ff; color: #6b21a8; }
+        .user-badge.guest { background: #f3f4f6; color: #374151; }
+
+        .audit-data {
+            max-width: 320px;
+            max-height: 120px;
+            overflow: auto;
+            background: var(--dashboard-bg);
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+        }
+
+        .time-ago {
+            font-size: 0.75rem;
+            color: var(--metric-tertiary);
+        }
+
+        .export-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="dashboard">
+    <div class="dashboard-container">
+        <aside class="dashboard-sidebar" role="complementary" aria-label="Audit navigation">
+            <div class="sidebar-header">
+                <div class="institutional-brand">
+                    <div class="emblem-small"></div>
+                    <div>
+                        <h1 class="institution-name">Fort Wolters Archive</h1>
+                        <p class="institution-meta">Audit Trail System</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-sections">
+                    <li><a href="dashboard.html" class="nav-section">📊 Return to Dashboard</a></li>
+                    <li class="nav-divider"></li>
+                    <li><a href="#recent" class="nav-section active">🕒 Recent Activity</a></li>
+                    <li><a href="#users" class="nav-section">👥 User Activity</a></li>
+                    <li><a href="#security" class="nav-section">🔒 Security Events</a></li>
+                    <li><a href="#exports" class="nav-section">📤 Data Exports</a></li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <div class="status-indicator active"></div>
+                    <span>Audit System Active</span>
+                </div>
+                <div class="last-updated" id="audit-last-updated">
+                    Loading...
+                </div>
+            </div>
+        </aside>
+        
+        <main class="dashboard-main" role="main">
+            <header class="dashboard-header">
+                <div class="header-controls">
+                    <h1 id="audit-heading">System Audit Trail</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="refreshAuditLog()">
+                            🔄 Refresh
+                        </button>
+                        <button class="btn btn-primary" onclick="exportAuditLog()">
+                            📥 Export Log
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="collection-summary-bar">
+                    <div class="summary-stat">
+                        <span class="stat-value" id="total-events">--</span>
+                        <span class="stat-label">Total Events</span>
+                    </div>
+                    <div class="summary-stat">
+                        <span class="stat-value" id="unique-users">--</span>
+                        <span class="stat-label">Unique Users</span>
+                    </div>
+                    <div class="summary-stat">
+                        <span class="stat-value" id="today-events">--</span>
+                        <span class="stat-label">Today's Events</span>
+                    </div>
+                    <div class="summary-stat">
+                        <span class="stat-value" id="avg-daily">--</span>
+                        <span class="stat-label">Avg. Daily</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="audit-filters">
+                <div class="config-group">
+                    <label for="filter-user">Filter by User</label>
+                    <select id="filter-user">
+                        <option value="">All Users</option>
+                    </select>
+                </div>
+                
+                <div class="config-group">
+                    <label for="filter-event">Filter by Event</label>
+                    <select id="filter-event">
+                        <option value="">All Events</option>
+                        <option value="user_login">User Logins</option>
+                        <option value="user_logout">User Logouts</option>
+                        <option value="action_performed">Actions</option>
+                        <option value="permission_denied">Permission Denied</option>
+                        <option value="api_request">API Requests</option>
+                        <option value="report_generated">Reports Generated</option>
+                        <option value="data_exported">Data Exports</option>
+                    </select>
+                </div>
+                
+                <div class="config-group">
+                    <label for="filter-date-start">Start Date</label>
+                    <input type="date" id="filter-date-start">
+                </div>
+                
+                <div class="config-group">
+                    <label for="filter-date-end">End Date</label>
+                    <input type="date" id="filter-date-end">
+                </div>
+                
+                <div class="config-actions">
+                    <button class="btn btn-secondary" onclick="applyFilters()">
+                        Apply Filters
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearFilters()">
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
+            
+            <div class="audit-table-container">
+                <table class="audit-table" id="audit-log-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Event</th>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Path</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody id="audit-log-body"></tbody>
+                </table>
+                
+                <div class="export-controls">
+                    <label>Export Format:</label>
+                    <select id="export-format">
+                        <option value="json">JSON</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                    <button class="btn btn-sm" onclick="exportFilteredLog()">
+                        Export Filtered Results
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div class="watermark-seal dashboard-watermark" aria-hidden="true"></div>
+
+    <script src="assets/js/auth.js"></script>
+    <script>
+        class AuditViewer {
+            constructor() {
+                this.filters = {
+                    userId: '',
+                    event: '',
+                    startDate: '',
+                    endDate: ''
+                };
+                this.auditLog = [];
+                this.init();
+            }
+
+            init() {
+                this.loadAuditLog();
+                this.setupFilters();
+                this.renderTable();
+                this.updateStats();
+                this.setDefaultEndDate();
+            }
+
+            loadAuditLog() {
+                if (window.AuthManager && window.AuthManager.getAuditLog) {
+                    this.auditLog = window.AuthManager.getAuditLog();
+                } else {
+                    const storedLog = localStorage.getItem('fw-audit-log');
+                    this.auditLog = storedLog ? JSON.parse(storedLog) : [];
+                }
+                this.auditLog.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            }
+
+            setupFilters() {
+                const users = [...new Set(this.auditLog.map(log => log.userId))];
+                const userSelect = document.getElementById('filter-user');
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user;
+                    option.textContent = user;
+                    userSelect.appendChild(option);
+                });
+
+                document.getElementById('filter-user').addEventListener('change', (e) => {
+                    this.filters.userId = e.target.value;
+                    this.applyFilters();
+                });
+                document.getElementById('filter-event').addEventListener('change', (e) => {
+                    this.filters.event = e.target.value;
+                    this.applyFilters();
+                });
+                document.getElementById('filter-date-start').addEventListener('change', (e) => {
+                    this.filters.startDate = e.target.value;
+                    this.applyFilters();
+                });
+                document.getElementById('filter-date-end').addEventListener('change', (e) => {
+                    this.filters.endDate = e.target.value;
+                    this.applyFilters();
+                });
+            }
+
+            applyFilters() {
+                this.renderTable();
+                this.updateStats();
+            }
+
+            clearFilters() {
+                this.filters = { userId: '', event: '', startDate: '', endDate: '' };
+                document.getElementById('filter-user').value = '';
+                document.getElementById('filter-event').value = '';
+                document.getElementById('filter-date-start').value = '';
+                document.getElementById('filter-date-end').value = '';
+                this.applyFilters();
+            }
+
+            getFilteredLog() {
+                let filtered = [...this.auditLog];
+                if (this.filters.userId) filtered = filtered.filter(log => log.userId === this.filters.userId);
+                if (this.filters.event) filtered = filtered.filter(log => log.event === this.filters.event);
+                if (this.filters.startDate) {
+                    const start = new Date(this.filters.startDate);
+                    filtered = filtered.filter(log => new Date(log.timestamp) >= start);
+                }
+                if (this.filters.endDate) {
+                    const end = new Date(this.filters.endDate);
+                    end.setHours(23, 59, 59, 999);
+                    filtered = filtered.filter(log => new Date(log.timestamp) <= end);
+                }
+                return filtered;
+            }
+
+            renderTable() {
+                const filteredLog = this.getFilteredLog();
+                const tbody = document.getElementById('audit-log-body');
+                tbody.innerHTML = '';
+
+                filteredLog.slice(0, 100).forEach(log => {
+                    const row = document.createElement('tr');
+                    const date = new Date(log.timestamp);
+                    const timeAgo = this.getTimeAgo(date);
+                    const badgeClass = `user-badge ${log.userRole}`;
+
+                    row.innerHTML = `
+                        <td>
+                            <div>${date.toLocaleDateString()}</div>
+                            <div class="time-ago">${timeAgo}</div>
+                        </td>
+                        <td>
+                            <div class="audit-event">${this.formatEventName(log.event)}</div>
+                            <div class="time-ago">${log.event}</div>
+                        </td>
+                        <td>
+                            <div class="audit-user">
+                                <div>${log.userId}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="${badgeClass}">${log.userRole}</span>
+                        </td>
+                        <td>${log.path || '/'}</td>
+                        <td>
+                            <div class="audit-data">
+                                ${JSON.stringify(log.data, null, 2)}
+                            </div>
+                        </td>
+                    `;
+
+                    tbody.appendChild(row);
+                });
+
+                document.getElementById('audit-last-updated').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+            }
+
+            formatEventName(event) {
+                const names = {
+                    user_login: 'User Login',
+                    user_logout: 'User Logout',
+                    action_performed: 'Action Performed',
+                    permission_denied: 'Permission Denied',
+                    api_request: 'API Request',
+                    report_generated: 'Report Generated',
+                    data_exported: 'Data Exported',
+                    session_loaded: 'Session Loaded',
+                    audit_log_exported: 'Audit Log Exported',
+                    api_permission_denied: 'API Permission Denied',
+                    session_created: 'Session Created'
+                };
+                return names[event] || event.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+            }
+
+            getTimeAgo(date) {
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                if (diffMins < 1) return 'just now';
+                if (diffMins < 60) return `${diffMins}m ago`;
+                if (diffHours < 24) return `${diffHours}h ago`;
+                if (diffDays < 7) return `${diffDays}d ago`;
+                return date.toLocaleDateString();
+            }
+
+            updateStats() {
+                const filteredLog = this.getFilteredLog();
+                const allLog = this.auditLog;
+                document.getElementById('total-events').textContent = allLog.length;
+                const uniqueUsers = new Set(allLog.map(log => log.userId));
+                document.getElementById('unique-users').textContent = uniqueUsers.size;
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayEvents = allLog.filter(log => new Date(log.timestamp) >= today);
+                document.getElementById('today-events').textContent = todayEvents.length;
+
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                const recentEvents = allLog.filter(log => new Date(log.timestamp) >= thirtyDaysAgo);
+                const avgDaily = recentEvents.length / 30;
+                document.getElementById('avg-daily').textContent = avgDaily.toFixed(1);
+
+                const heading = document.getElementById('audit-heading');
+                if (filteredLog.length !== allLog.length) {
+                    heading.innerHTML = `System Audit Trail <small>(${filteredLog.length} of ${allLog.length} entries)</small>`;
+                } else {
+                    heading.textContent = 'System Audit Trail';
+                }
+            }
+
+            exportFilteredLog() {
+                const format = document.getElementById('export-format').value;
+                const filteredLog = this.getFilteredLog();
+                if (format === 'json') {
+                    this.downloadJSON(filteredLog);
+                } else if (format === 'csv') {
+                    this.downloadCSV(filteredLog);
+                }
+                if (window.AuthManager) {
+                    window.AuthManager.logAudit('audit_log_exported', {
+                        format,
+                        entryCount: filteredLog.length,
+                        filtered: true
+                    });
+                }
+            }
+
+            downloadJSON(data) {
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                this.downloadFile(blob, `audit-filtered-${new Date().toISOString().split('T')[0]}.json`);
+            }
+
+            downloadCSV(data) {
+                const headers = ['Timestamp', 'Event', 'User ID', 'User Role', 'Path', 'Data'];
+                const rows = data.map(log => [
+                    log.timestamp,
+                    log.event,
+                    log.userId,
+                    log.userRole,
+                    log.path,
+                    JSON.stringify(log.data)
+                ]);
+                const csv = [headers, ...rows]
+                    .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+                    .join('\n');
+                const blob = new Blob([csv], { type: 'text/csv' });
+                this.downloadFile(blob, `audit-filtered-${new Date().toISOString().split('T')[0]}.csv`);
+            }
+
+            downloadFile(blob, filename) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            setDefaultEndDate() {
+                const endInput = document.getElementById('filter-date-end');
+                if (endInput && !endInput.value) {
+                    const today = new Date().toISOString().split('T')[0];
+                    endInput.value = today;
+                }
+            }
+        }
+
+        window.refreshAuditLog = function() {
+            window.auditViewer.loadAuditLog();
+            window.auditViewer.renderTable();
+            window.auditViewer.updateStats();
+            if (window.AuthManager) {
+                window.AuthManager.logAudit('audit_log_refreshed');
+            }
+        };
+
+        window.exportAuditLog = function() {
+            if (window.AuthManager && window.AuthManager.exportAuditLog) {
+                const format = document.getElementById('export-format').value;
+                window.AuthManager.exportAuditLog(format);
+            } else if (window.auditViewer) {
+                window.auditViewer.exportFilteredLog();
+            }
+        };
+
+        window.applyFilters = function() {
+            window.auditViewer.applyFilters();
+        };
+
+        window.clearFilters = function() {
+            window.auditViewer.clearFilters();
+        };
+
+        window.exportFilteredLog = function() {
+            window.auditViewer.exportFilteredLog();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.AuthManager && !window.AuthManager.hasPermission('audit:full')) {
+                alert('You do not have permission to view the audit trail.');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            window.auditViewer = new AuditViewer();
+        });
+    </script>
+</body>
+</html>

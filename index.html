@@ -1,280 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1965 Hughes TH-55A Presentation Lighter | Collector's Edition</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --gold: #d4af37;
-            --dark-bg: #0a0a0a;
-            --card-bg: #151515;
-            --text-gray: #b0b0b0;
-            --border: rgba(212, 175, 55, 0.3);
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            background-color: var(--dark-bg);
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            line-height: 1.8;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 80px 20px;
-        }
-
-        /* --- HEADER SECTION --- */
-        header {
-            text-align: center;
-            margin-bottom: 100px;
-            padding-bottom: 60px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        h1 {
-            font-family: 'EB Garamond', serif;
-            font-size: 3.5rem;
-            color: var(--gold);
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
-
-        .subtitle {
-            font-family: 'EB Garamond', serif;
-            font-style: italic;
-            font-size: 1.6rem;
-            color: var(--text-gray);
-            margin-top: 10px;
-        }
-
-        /* --- CHAPTER/SECTION STYLING --- */
-        section {
-            margin-bottom: 120px;
-        }
-
-        .chapter-title {
-            font-family: 'EB Garamond', serif;
-            color: var(--gold);
-            font-size: 2.2rem;
-            text-align: center;
-            margin-bottom: 10px;
-            text-transform: capitalize;
-        }
-
-        .chapter-subtitle {
-            text-align: center;
-            color: #888;
-            font-style: italic;
-            margin-bottom: 50px;
-            display: block;
-        }
-
-        /* --- FLEX & GRID LAYOUTS --- */
-        .feature-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            margin-bottom: 40px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s ease;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-        }
-
-        .img-wrap {
-            width: 100%;
-            height: 400px;
-            background: #111; /* Fixes White Box Issue */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.3s;
-        }
-
-        .img-wrap:hover img {
-            opacity: 0.8;
-        }
-
-        .text-wrap {
-            padding: 30px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .text-wrap p {
-            margin: 0;
-            color: var(--gold);
-            font-size: 1rem;
-            font-weight: 300;
-        }
-
-        /* --- LIGHTBOX MODAL --- */
-        #lightbox {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98);
-            z-index: 99999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        #lightbox-img {
-            max-width: 90%;
-            max-height: 80vh;
-            border: 1px solid var(--gold);
-        }
-
-        #lightbox-caption {
-            margin-top: 20px;
-            color: var(--gold);
-            font-family: 'EB Garamond', serif;
-            font-size: 1.3rem;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 20px; right: 30px;
-            color: white; font-size: 50px; cursor: pointer;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            .grid-layout { grid-template-columns: 1fr; }
-            .img-wrap { height: 280px; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1965 U.S. Army Aviation Presentation Lighter | Provenance Dossier</title>
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
+  <main class="document">
 
-<div class="container">
-    <header>
-        <h1>Museum Grade Artifact</h1>
-        <div class="subtitle">The Arthur P. Lancy Jr. Collection</div>
-        <p style="margin-top: 20px; color: var(--text-gray);">Class 65-9WA • Fort Wolters • TH-55A Osage</p>
+    <!-- COVER / OVERVIEW PAGE -->
+    <header class="site-header page-block no-break">
+      <h1>1965 U.S. Army Aviation Presentation Lighter</h1>
+      <p class="subtitle">Provenance, Service Context, and Archival Documentation</p>
+      <p class="meta-line">
+        Artifact: Presentation lighter – Class 65‑9WA, Fort Wolters, Texas, 1965
+      </p>
+      <p class="meta-line">
+        Associated Aviator: Warrant Officer Candidate Arthur P. Lancy Jr.
+      </p>
     </header>
 
-    <section>
-        <h2 class="chapter-title">Chapter 2: Fort Wolters - Where Legends Were Forged</h2>
-        <span class="chapter-subtitle">The Primary Helicopter School of the U.S. Army</span>
-        
-        <div class="feature-box">
-            <div class="img-wrap" onclick="openLB('/lighter-sales-landing-page/pic_7.jpg', 'Original Class Photo: Class 65-9WA at Fort Wolters')">
-                <img src="/lighter-sales-landing-page/pic_7.jpg" alt="Class Photo">
-            </div>
-            <div class="text-wrap">
-                <p>Class 65-9WA military aviation training class with handwritten identification key listing the names of soldiers. Representative of the era when thousands received primary training during the Vietnam War period.</p>
-            </div>
-        </div>
+    <!-- OVERVIEW SECTION -->
+    <section class="content-panel page-block">
+      <h2>Overview</h2>
+      <p>
+        This document provides an archival-style overview of a 1965 U.S. Army Aviation
+        presentation lighter associated with the primary helicopter training class
+        65‑9WA at Fort Wolters, Texas. It is designed as a combined web and print
+        dossier suitable for collectors, curators, and institutions.
+      </p>
+      <p>
+        The structure follows museum-adjacent practice: contextual overview, service
+        and training timeline, physical description, and a formal certificate of
+        provenance for recordkeeping and insurance purposes.
+      </p>
     </section>
 
-    <section>
-        <h2 class="chapter-title">Chapter 3: The Presentation Lighter</h2>
-        <span class="chapter-subtitle">A Tangible Piece of History, Preserved through Six Decades</span>
-        
-        <div class="grid-layout">
-            <div class="feature-box">
-                <div class="img-wrap" onclick="openLB('/lighter-sales-landing-page/pic_1.jpg', 'Front View: Presentation Engraving')">
-                    <img src="/lighter-sales-landing-page/pic_1.jpg" alt="Lighter Front">
-                </div>
-                <div class="text-wrap">
-                    <p>The front face displays "Class 65-9WA" and the Hughes "World Leader" insignia - symbols of cutting-edge aviation technology of 1965.</p>
-                </div>
-            </div>
+    <!-- TIMELINE SECTION -->
+    <section class="content-panel page-block">
+      <h2>Service & Training Timeline</h2>
 
-            <div class="feature-box">
-                <div class="img-wrap" onclick="openLB('/lighter-sales-landing-page/pic_2.jpg', 'Reverse View: Arthur P. Lancy Jr. Inscription')">
-                    <img src="/lighter-sales-landing-page/pic_2.jpg" alt="Lighter Back">
-                </div>
-                <div class="text-wrap">
-                    <p>"Presented to WOC Arthur P. Lancy Jr., Member, First Graduating Class Using Hughes TH-55A Helicopter, Fort Wolters, Texas, 1965."</p>
-                </div>
-            </div>
-        </div>
+      <article class="timeline-item">
+        <h3>Early 1965 – Fort Wolters, Texas</h3>
+        <p>
+          Class 65‑9WA begins primary helicopter training on the Hughes TH‑55A
+          Osage airframe at the U.S. Army Primary Helicopter School at Fort
+          Wolters, Texas.
+        </p>
+      </article>
+
+      <article class="timeline-item">
+        <h3>Mid 1965 – Presentation of Lighter</h3>
+        <p>
+          Presentation lighter engraved for WOC Arthur P. Lancy Jr. recognizing his
+          participation in the first graduating class using the Hughes TH‑55A
+          helicopter at Fort Wolters.
+        </p>
+      </article>
+
+      <article class="timeline-item">
+        <h3>Vietnam War Era – Aviation Service Context</h3>
+        <p>
+          The training pipeline at Fort Wolters feeds directly into U.S. Army
+          rotary‑wing operations in the Vietnam theater, where the TH‑55A serves as a
+          primary trainer for pilots transitioning to combat aircraft.
+        </p>
+      </article>
+
+      <article class="timeline-item">
+        <h3>Subsequent Decades – Private Custody</h3>
+        <p>
+          The lighter remains in private custody, retaining period engraving, maker
+          marks, and surface characteristics consistent with mid‑1960s U.S.‑made
+          presentation lighters.
+        </p>
+      </article>
     </section>
 
-    <section>
-        <h2 class="chapter-title">Chapter 4: Craftsmanship & Authenticity</h2>
-        <span class="chapter-subtitle">Every Detail Tells the Story of Quality</span>
-        
-        <div class="grid-layout">
-            <div class="feature-box">
-                <div class="img-wrap" onclick="openLB('/lighter-sales-landing-page/pic_3.jpg', 'Maker Mark: Park Lighter USA')">
-                    <img src="/lighter-sales-landing-page/pic_3.jpg" alt="Branding">
-                </div>
-                <div class="text-wrap">
-                    <p>The PARK brand marking - "Made in U.S.A." - confirms this as an authentic American-made presentation piece from the mid-1960s.</p>
-                </div>
-            </div>
+    <!-- ARTIFACT DETAILS / VALOR CARDS -->
+    <section class="content-panel page-block">
+      <h2>Artifact Details</h2>
 
-            <div class="feature-box">
-                <div class="img-wrap" onclick="openLB('/lighter-sales-landing-page/pic_1.jpg', 'Alternative View')">
-                    <img src="/lighter-sales-landing-page/pic_1.jpg" alt="Side Profile">
-                </div>
-                <div class="text-wrap">
-                    <p>The side profile reveals exceptional preservation - original brushed metal finish intact and engravings sharp after nearly 60 years.</p>
-                </div>
-            </div>
+      <div class="valor-grid">
+        <div class="valor-card">
+          <h3>Physical Description</h3>
+          <p>
+            Rectangular metal petrol lighter, brushed finish, engraved with
+            “Class 65‑9WA” and Hughes “World Leader” insignia on obverse, and
+            dedication text to WOC Arthur P. Lancy Jr. on reverse.
+          </p>
         </div>
+
+        <div class="valor-card">
+          <h3>Maker & Markings</h3>
+          <p>
+            Marked “PARK – Made in U.S.A.” at the base, consistent with period
+            American‑manufactured lighters used for military and corporate
+            presentation pieces.
+          </p>
+        </div>
+
+        <div class="valor-card">
+          <h3>Condition Notes</h3>
+          <p>
+            Engraving remains legible with minimal loss, finish exhibits
+            age‑appropriate wear, and structural components present intact unless
+            otherwise noted in an attached condition report.
+          </p>
+        </div>
+
+        <div class="valor-card">
+          <h3>Provenance Summary</h3>
+          <p>
+            Presented to WOC Arthur P. Lancy Jr. at Fort Wolters in 1965; retained
+            in private hands with continuity of ownership represented by this
+            dossier and accompanying documentation.
+          </p>
+        </div>
+      </div>
     </section>
 
-    <footer style="text-align: center; border-top: 1px solid var(--border); padding-top: 40px; color: #555;">
-        <p>&copy; 2025 The Lancy Collection - Historical Documentation Only</p>
-    </footer>
-</div>
+    <!-- REFERENCE PHOTOGRAPHY -->
+    <section class="content-panel page-block">
+      <h2>Reference Photography</h2>
+      <p>
+        Representative photographs documenting engraving legibility, maker’s mark,
+        and overall finish for collection and insurance records.
+      </p>
 
-<div id="lightbox" onclick="closeLB()">
-    <span class="close-btn">&times;</span>
-    <img id="lightbox-img" src="">
-    <div id="lightbox-caption"></div>
-</div>
+      <div class="photo-grid">
+        <figure class="photo-card">
+          <img src="lighter_front.jpg" alt="Front face engraving with Hughes World Leader insignia" />
+          <figcaption>Obverse engraving with Hughes “World Leader” insignia and Class 65‑9WA marking.</figcaption>
+        </figure>
 
-<script>
-    function openLB(src, cap) {
-        document.getElementById('lightbox-img').src = src;
-        document.getElementById('lightbox-caption').innerText = cap;
-        document.getElementById('lightbox').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
+        <figure class="photo-card">
+          <img src="lighter_back.jpg" alt="Reverse dedication text to WOC Arthur P. Lancy Jr." />
+          <figcaption>Reverse dedication to Warrant Officer Candidate Arthur P. Lancy Jr., Fort Wolters, 1965.</figcaption>
+        </figure>
 
-    function closeLB() {
-        document.getElementById('lightbox').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
+        <figure class="photo-card">
+          <img src="lighter_bottom.jpg" alt="Base view showing PARK Made in U.S.A. maker mark" />
+          <figcaption>Base stamp: “PARK – Made in U.S.A.” identifying manufacturer and country of origin.</figcaption>
+        </figure>
 
-    document.addEventListener('keydown', e => {
-        if(e.key === 'Escape') closeLB();
-    });
-</script>
+        <figure class="photo-card">
+          <img src="lighter_image-1.jpg" alt="Side view showing brushed metal finish and hinge" />
+          <figcaption>Side perspective illustrating brushed metal finish, hinge integrity, and surface wear.</figcaption>
+        </figure>
+      </div>
+    </section>
 
+    <!-- CERTIFICATE OF PROVENANCE (PRINT-READY PAGE) -->
+    <section class="certificate-panel page-block no-break">
+      <header class="certificate-header">
+        <h2>Certificate of Provenance</h2>
+        <p class="certificate-subtitle">
+          1965 U.S. Army Aviation Presentation Lighter – Class 65‑9WA
+        </p>
+      </header>
+
+      <div class="certificate-body">
+        <div class="certificate-row">
+          <div class="cert-label">Artifact Title</div>
+          <div class="cert-value">
+            1965 U.S. Army Aviation Presentation Lighter – Fort Wolters, Class 65‑9WA
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Associated Aviator</div>
+          <div class="cert-value">
+            Warrant Officer Candidate Arthur P. Lancy Jr.
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Object Type</div>
+          <div class="cert-value">
+            Presentation petrol lighter, engraved, U.S. manufacture
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Period</div>
+          <div class="cert-value">
+            Vietnam War era, circa 1965
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Location of Presentation</div>
+          <div class="cert-value">
+            U.S. Army Primary Helicopter School, Fort Wolters, Texas
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Inscription (Reverse)</div>
+          <div class="cert-value">
+            “Presented to WOC Arthur P. Lancy Jr., Member, First Graduating Class
+            Using Hughes TH‑55A Helicopter, Fort Wolters, Texas, 1965.”
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Maker / Mark</div>
+          <div class="cert-value">
+            PARK – Made in U.S.A.
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Provenance Statement</div>
+          <div class="cert-value">
+            To the best of the issuer’s knowledge and documentation, this lighter
+            is an authentic mid‑1960s U.S. presentation piece associated with the
+            above‑named aviator and class at Fort Wolters, Texas. This certificate
+            is issued to accompany the artifact as a record of provenance and
+            identification.
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Certificate ID</div>
+          <div class="cert-value">
+            LANCY‑TH55‑1965‑001
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Issue Date</div>
+          <div class="cert-value">
+            ______________________
+          </div>
+        </div>
+
+        <div class="certificate-row">
+          <div class="cert-label">Issued By</div>
+          <div class="cert-value">
+            ______________________<br />
+            Name / Entity
+          </div>
+        </div>
+      </div>
+
+      <footer class="certificate-footer">
+        <div class="signature-block">
+          <div class="signature-line"></div>
+          <div class="signature-label">Authorized Signature</div>
+        </div>
+        <div class="signature-block">
+          <div class="signature-line"></div>
+          <div class="signature-label">Printed Name</div>
+        </div>
+        <div class="signature-block">
+          <div class="signature-line"></div>
+          <div class="signature-label">Date</div>
+        </div>
+      </footer>
+    </section>
+
+  </main>
 </body>
 </html>

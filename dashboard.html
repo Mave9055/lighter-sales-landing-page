@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection Dashboard | Fort Wolters Archive</title>
+    <meta name="description" content="Institutional oversight dashboard for the Fort Wolters Archive collection.">
+    
+    <!-- Critical dashboard CSS -->
+    <style id="dashboard-critical">
+        :root {
+            --dashboard-bg: #f8f9fa;
+            --card-surface: #ffffff;
+            --metric-primary: #1a2d1a;
+            --metric-secondary: #D4AF37;
+            --metric-tertiary: #8a8d8f;
+            --trend-up: #10b981;
+            --trend-down: #ef4444;
+            --trend-neutral: #6b7280;
+            --border-light: #e5e7eb;
+        }
+        
+        body.dashboard {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--dashboard-bg);
+            color: #1f2937;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Critical loading states */
+        .dashboard-loading {
+            position: fixed;
+            inset: 0;
+            background: var(--dashboard-bg);
+            display: grid;
+            place-items: center;
+            z-index: 9999;
+        }
+        
+        .dashboard-loaded .dashboard-loading {
+            display: none;
+        }
+    </style>
+    
+    <!-- Deferred styles -->
+    <link rel="stylesheet" href="assets/css/dashboard.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="assets/css/watermark.css">
+    <noscript>
+        <link rel="stylesheet" href="assets/css/dashboard.css">
+    </noscript>
+    
+    <!-- Charting library (lightweight) -->
+    <script src="https://unpkg.com/apexcharts" defer></script>
+</head>
+<body class="dashboard">
+    <!-- Loading overlay -->
+    <div class="dashboard-loading" id="loading">
+        <div class="loading-content">
+            <div class="emblem-letterhead" style="width: 100px; height: 100px;"></div>
+            <p class="loading-text">Loading Collection Dashboard...</p>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar" role="complementary" aria-label="Dashboard navigation">
+            <div class="sidebar-header">
+                <div class="institutional-brand">
+                    <div class="emblem-small"></div>
+                    <div>
+                        <h1 class="institution-name">Fort Wolters Archive</h1>
+                        <p class="institution-meta">Collection Management System</p>
+                    </div>
+                </div>
+
+                <div class="user-info" aria-label="Authenticated user details">
+                    <div class="user-avatar">U</div>
+                    <div class="user-details">
+                        <div class="user-name">Authenticating...</div>
+                        <div class="user-role">Loading user...</div>
+                    </div>
+                </div>
+                
+                <div class="collection-stats-compact">
+                    <div class="stat-compact">
+                        <span class="stat-value" id="total-items">--</span>
+                        <span class="stat-label">Total Items</span>
+                    </div>
+                    <div class="stat-compact">
+                        <span class="stat-value" id="total-value">--</span>
+                        <span class="stat-label">Insured Value</span>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav" role="navigation" aria-label="Dashboard sections">
+                <ul class="nav-sections" role="list">
+                    <li>
+                        <a href="#overview" class="nav-section active" data-section="overview">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Collection Overview</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#provenance" class="nav-section" data-section="provenance">
+                            <span class="nav-icon">⛓️</span>
+                            <span class="nav-text">Provenance Chain</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#conservation" class="nav-section" data-section="conservation">
+                            <span class="nav-icon">🔬</span>
+                            <span class="nav-text">Conservation Status</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#acquisitions" class="nav-section" data-section="acquisitions">
+                            <span class="nav-icon">📥</span>
+                            <span class="nav-text">Acquisitions</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#reports" class="nav-section" data-section="reports" data-permission="view:reports">
+                            <span class="nav-icon">📄</span>
+                            <span class="nav-text">Institutional Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="audit.html" class="nav-section" data-permission="audit:full" data-action-description="view audit trail">
+                            <span class="nav-icon">🛡️</span>
+                            <span class="nav-text">Audit Trail</span>
+                        </a>
+                    </li>
+                    <li class="nav-divider"></li>
+                    <li>
+                        <a href="index.html" class="nav-section">
+                            <span class="nav-icon">🏛️</span>
+                            <span class="nav-text">Return to Public Archive</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="verify.html" class="nav-section">
+                            <span class="nav-icon">✅</span>
+                            <span class="nav-text">Document Verification</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="login.html" class="nav-section">
+                            <span class="nav-icon">🔐</span>
+                            <span class="nav-text">Login</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <div class="status-indicator active" aria-label="System status: Online"></div>
+                    <span>Dashboard v2.1.0</span>
+                </div>
+                <div class="last-updated">
+                    Updated: <time id="last-updated-time">--</time>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main content -->
+        <main class="dashboard-main" role="main">
+            <header class="dashboard-header">
+                <div class="header-controls">
+                    <h1 id="current-section">Collection Overview</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" data-action="refresh">
+                            <span class="btn-icon">🔄</span>
+                            Refresh Data
+                        </button>
+                        <button class="btn btn-primary" data-action="export" data-permission="generate:reports" data-action-description="export dashboard report">
+                            <span class="btn-icon">📤</span>
+                            Export Report
+                        </button>
+                        <div class="date-range">
+                            <label for="date-filter">Time Range:</label>
+                            <select id="date-filter">
+                                <option value="all">All Time</option>
+                                <option value="year">Past Year</option>
+                                <option value="quarter">Current Quarter</option>
+                                <option value="month">Current Month</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="collection-summary-bar">
+                    <div class="summary-stat">
+                        <span class="stat-value" id="active-items">--</span>
+                        <span class="stat-label">Active Records</span>
+                    </div>
+                    <div class="summary-stat">
+                        <span class="stat-value" id="pending-actions">--</span>
+                        <span class="stat-label">Pending Actions</span>
+                    </div>
+                    <div class="summary-stat">
+                        <span class="stat-value" id="avg-age">--</span>
+                        <span class="stat-label">Avg. Age (Years)</span>
+                    </div>
+                    <div class="summary-stat">
+                        <span class="stat-value" id="completion-rate">--%</span>
+                        <span class="stat-label">Documentation Complete</span>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Dashboard sections -->
+            <div class="dashboard-sections">
+                
+                <!-- Overview Section -->
+                <section id="overview" class="dashboard-section active" role="region" aria-labelledby="overview-heading">
+                    <div class="section-header">
+                        <h2 id="overview-heading">Collection at a Glance</h2>
+                        <p class="section-description">High-level metrics and trends</p>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <!-- Key metric cards -->
+                        <article class="metric-card" data-metric="total-artifacts">
+                            <div class="metric-header">
+                                <h3 class="metric-title">Total Artifacts</h3>
+                                <span class="metric-trend" data-trend="up">+12%</span>
+                            </div>
+                            <div class="metric-value">1,247</div>
+                            <div class="metric-breakdown">
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">Archaeological</span>
+                                    <span class="breakdown-value">892</span>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">Historical</span>
+                                    <span class="breakdown-value">248</span>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span class="breakdown-label">Personal Effects</span>
+                                    <span class="breakdown-value">107</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <article class="metric-card" data-metric="provenance-complete">
+                            <div class="metric-header">
+                                <h3 class="metric-title">Provenance Complete</h3>
+                                <span class="metric-trend" data-trend="up">+8%</span>
+                            </div>
+                            <div class="metric-value">94%</div>
+                            <div class="metric-chart">
+                                <div class="chart-mini" id="provenance-chart"></div>
+                            </div>
+                            <div class="metric-footer">
+                                <span>72 items need documentation</span>
+                            </div>
+                        </article>
+                        
+                        <article class="metric-card" data-metric="conservation-status">
+                            <div class="metric-header">
+                                <h3 class="metric-title">Conservation Status</h3>
+                                <span class="metric-trend" data-trend="neutral">±0%</span>
+                            </div>
+                            <div class="metric-status-indicators">
+                                <div class="status-indicator good" title="Stable: 1,043 items">
+                                    <span class="status-label">Stable</span>
+                                    <span class="status-value">84%</span>
+                                </div>
+                                <div class="status-indicator warning" title="Monitor: 156 items">
+                                    <span class="status-label">Monitor</span>
+                                    <span class="status-value">13%</span>
+                                </div>
+                                <div class="status-indicator critical" title="Urgent: 48 items">
+                                    <span class="status-label">Urgent</span>
+                                    <span class="status-value">3%</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <article class="metric-card" data-metric="acquisition-timeline">
+                            <div class="metric-header">
+                                <h3 class="metric-title">Acquisition Timeline</h3>
+                                <span class="metric-trend" data-trend="up">+24%</span>
+                            </div>
+                            <div class="metric-value">18</div>
+                            <div class="metric-description">New items this quarter</div>
+                            <div class="timeline-sparkline" id="acquisition-sparkline"></div>
+                        </article>
+                    </div>
+                    
+                    <!-- Charts row -->
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Collection by Era</h3>
+                                <button class="chart-control" data-action="chart-fullscreen" aria-label="Expand chart">
+                                    ⛶
+                                </button>
+                            </div>
+                            <div class="chart-container">
+                                <div id="era-chart" class="chart-area"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Provenance Chain Length</h3>
+                                <button class="chart-control" data-action="chart-fullscreen" aria-label="Expand chart">
+                                    ⛶
+                                </button>
+                            </div>
+                            <div class="chart-container">
+                                <div id="provenance-chain-chart" class="chart-area"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent activity -->
+                    <div class="activity-card">
+                        <div class="card-header">
+                            <h3>Recent Activity</h3>
+                            <a href="#activity-log" class="view-all">View Full Log →</a>
+                        </div>
+                        <div class="activity-feed" id="recent-activity">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Provenance Section -->
+                <section id="provenance" class="dashboard-section" role="region" aria-labelledby="provenance-heading">
+                    <div class="section-header">
+                        <h2 id="provenance-heading">Provenance Chain Analysis</h2>
+                        <p class="section-description">Chain of custody completeness and gaps</p>
+                    </div>
+                    
+                    <div class="analysis-grid">
+                        <div class="analysis-card">
+                            <h3>Chain Completeness</h3>
+                            <div class="compliance-meter">
+                                <div class="meter-value" style="width: 87%">
+                                    <span class="meter-label">87% Complete</span>
+                                </div>
+                            </div>
+                            <div class="compliance-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Fully Documented</span>
+                                    <span class="detail-value">892 items</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Partial Chains</span>
+                                    <span class="detail-value">248 items</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Gaps Identified</span>
+                                    <span class="detail-value">107 items</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="analysis-card">
+                            <h3>Verification Status</h3>
+                            <div class="verification-grid">
+                                <div class="verification-item verified">
+                                    <span class="verification-icon">✅</span>
+                                    <div>
+                                        <div class="verification-count">1,104</div>
+                                        <div class="verification-label">Third-party verified</div>
+                                    </div>
+                                </div>
+                                <div class="verification-item pending">
+                                    <span class="verification-icon">⏳</span>
+                                    <div>
+                                        <div class="verification-count">98</div>
+                                        <div class="verification-label">Awaiting verification</div>
+                                    </div>
+                                </div>
+                                <div class="verification-item flagged">
+                                    <span class="verification-icon">🚩</span>
+                                    <div>
+                                        <div class="verification-count">45</div>
+                                        <div class="verification-label">Flags for review</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-card">
+                        <div class="card-header">
+                            <h3>Items with Incomplete Provenance</h3>
+                            <div class="table-controls">
+                                <input type="text" placeholder="Search items..." class="table-search">
+                                <button class="btn btn-sm" data-action="export-csv">Export CSV</button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Item</th>
+                                        <th>Era</th>
+                                        <th>Gap Period</th>
+                                        <th>Priority</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="provenance-gaps-table">
+                                    <!-- Dynamically populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Conservation Section -->
+                <section id="conservation" class="dashboard-section" role="region" aria-labelledby="conservation-heading">
+                    <div class="section-header">
+                        <h2 id="conservation-heading">Conservation Management</h2>
+                        <p class="section-description">Condition tracking and treatment scheduling</p>
+                    </div>
+                    
+                    <div class="conservation-grid">
+                        <div class="condition-summary">
+                            <h3>Condition Overview</h3>
+                            <div class="condition-meter">
+                                <div class="condition-segment excellent" style="flex: 6">
+                                    <span class="segment-label">Excellent</span>
+                                    <span class="segment-value">60%</span>
+                                </div>
+                                <div class="condition-segment good" style="flex: 3">
+                                    <span class="segment-label">Good</span>
+                                    <span class="segment-value">30%</span>
+                                </div>
+                                <div class="condition-segment fair" style="flex: 1">
+                                    <span class="segment-label">Fair</span>
+                                    <span class="segment-value">7%</span>
+                                </div>
+                                <div class="condition-segment poor" style="flex: 0.5">
+                                    <span class="segment-label">Poor</span>
+                                    <span class="segment-value">3%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="treatment-schedule">
+                            <h3>Upcoming Treatments</h3>
+                            <div class="schedule-list" id="treatment-schedule">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Watermark -->
+            <div class="watermark-seal dashboard-watermark" aria-hidden="true"></div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="assets/js/auth.js" defer></script>
+    <script src="assets/js/dashboard.js" defer></script>
+    <script src="assets/js/identity.js" defer></script>
+</body>
+</html>
